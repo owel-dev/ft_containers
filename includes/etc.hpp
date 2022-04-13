@@ -159,7 +159,7 @@ bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
 
 template <class T1, class T2>
 bool operator>=(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs) {
-  !(lhs < rhs);
+  return !(lhs < rhs);
 }
 
 // * iterator_traits
