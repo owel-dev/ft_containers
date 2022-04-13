@@ -3,3 +3,5 @@ containers_test
 build/*
 .DS_Store
 .idea
+obj/
+ft_containers
