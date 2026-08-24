@@ -39,7 +39,7 @@ private:
 
   void vallocate(size_type n) {
     if (n > max_size())
-      throw std::out_of_range("vector");
+      throw std::length_error("vector");
     _begin = _end = _alloc.allocate(n);
     _end_cap = _begin + n;
   }
