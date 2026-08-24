@@ -112,7 +112,8 @@ public:
          const allocator_type &alloc = allocator_type(),
          typename ft::enable_if<!ft::is_integral<InputIterator>::value,
                                 InputIterator>::type * = u_nullptr)
-      : _alloc(alloc) {
+      : _alloc(alloc), _begin(u_nullptr), _end(u_nullptr),
+        _end_cap(u_nullptr) {
     difference_type n = std::distance(first, last);
     if (n > 0) {
       vallocate(n);
