@@ -267,7 +267,7 @@ public:
                    sizeof(value_type) * (_end - new_position));
     _alloc.construct(new_position, val);
     ++_end;
-    return position;
+    return new_position;
   }
 
   iterator insert(iterator position, size_type n, const_reference val) {
