@@ -192,7 +192,11 @@ public:
       size_type p_cap = capacity();
       vallocate(n);
       construct_at_end(_begin + p_size, p_begin);
-      _alloc.deallocate(p_begin, p_cap);
+      // 옛 저장소의 원소를 파괴한 뒤 해제합니다. 용량 0 에서 커질 때는 옛 저장소가 없습니다.
+      for (size_type i = 0; i < p_size; ++i)
+        _alloc.destroy(p_begin + i);
+      if (p_begin != u_nullptr)
+        _alloc.deallocate(p_begin, p_cap);
     }
   }
 
