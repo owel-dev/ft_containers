@@ -248,9 +248,16 @@ public:
   void assign(InputIterator first, InputIterator last,
               typename ft::enable_if<!ft::is_integral<InputIterator>::value,
                                      InputIterator>::type * = u_nullptr) {
-    clear();
-    for (; first != last; ++first)
-      push_back(*first);
+    // 복사 대입이 이 함수를 거칩니다. 용량이 모자랄 때만 한 번 할당하고,
+    // 아니면 기존 저장소에 제자리에서 다시 만듭니다.
+    size_type n = static_cast<size_type>(std::distance(first, last));
+    if (n > capacity()) {
+      vdeallocate();
+      vallocate(n);
+    } else {
+      clear();
+    }
+    construct_at_end(_begin + n, first);
   }
 
   void push_back(const value_type &val) {
