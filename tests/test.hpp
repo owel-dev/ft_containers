@@ -256,6 +256,80 @@ private:
 };
 
 // ---------------------------------------------------------------------------
+// 레드블랙 트리 검사
+//
+// ft::rb_node 처럼 left, right, parent, is_black 멤버를 가진 노드라면 어떤 트리든
+// 검사할 수 있습니다. 확인하는 성질은 다음 네 가지입니다.
+//
+//   1. 루트는 검정이다.
+//   2. 빨강 노드의 자식은 모두 검정이다. (빨강이 연달아 나오지 않는다)
+//   3. 어느 노드에서 출발하든 리프까지 내려가는 모든 경로의 검정 노드 수가 같다.
+//   4. 자식의 parent 포인터는 자기 부모를 가리킨다.
+//
+// 1 부터 3 이 지켜지면 트리 높이는 2 * log2(n + 1) 을 넘지 않으므로,
+// 삽입과 삭제와 탐색이 O(log n) 임이 보장됩니다.
+// ---------------------------------------------------------------------------
+
+// 부분 트리의 검정 높이를 돌려줍니다. 위반이 있으면 -1 입니다.
+template <class NodePtr>
+int rb_black_height(NodePtr node, NodePtr expected_parent) {
+  if (node == 0)
+    return 1; // 비어 있는 자리(NIL)는 검정으로 셉니다.
+  if (node->parent != expected_parent)
+    return -1;
+  if (!node->is_black) {
+    if (node->left != 0 && !node->left->is_black)
+      return -1;
+    if (node->right != 0 && !node->right->is_black)
+      return -1;
+  }
+  int left = rb_black_height(node->left, node);
+  int right = rb_black_height(node->right, node);
+  if (left < 0 || right < 0 || left != right)
+    return -1;
+  return left + (node->is_black ? 1 : 0);
+}
+
+// ft::rb_tree 는 end 센티널 노드의 left 가 루트입니다. 그 센티널을 받습니다.
+template <class NodePtr> bool rb_tree_is_valid(NodePtr end_node) {
+  NodePtr root = end_node->left;
+  if (root == 0)
+    return true;
+  if (!root->is_black)
+    return false;
+  return rb_black_height(root, end_node) > 0;
+}
+
+template <class NodePtr> int rb_tree_height(NodePtr node) {
+  if (node == 0)
+    return 0;
+  int left = rb_tree_height(node->left);
+  int right = rb_tree_height(node->right);
+  return 1 + (left > right ? left : right);
+}
+
+// 노드 수가 n 인 레드블랙 트리가 가질 수 있는 최대 높이입니다.
+inline int rb_max_height(std::size_t n) {
+  int log2 = 0;
+  for (std::size_t v = n + 1; v > 1; v >>= 1)
+    ++log2;
+  return 2 * (log2 + 1);
+}
+
+// 키 순서는 반복자로 확인합니다. 인접한 두 원소가 comp 기준으로 엄격히 증가해야 합니다.
+template <class Iterator, class Compare>
+bool strictly_sorted(Iterator first, Iterator last, Compare comp) {
+  if (first == last)
+    return true;
+  Iterator prev = first;
+  ++first;
+  for (; first != last; ++first, ++prev)
+    if (!comp(*prev, *first))
+      return false;
+  return true;
+}
+
+// ---------------------------------------------------------------------------
 // 실행기
 // ---------------------------------------------------------------------------
 
