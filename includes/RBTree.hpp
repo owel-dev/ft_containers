@@ -479,43 +479,37 @@ public:
     std::swap(_size, x._size);
   }
 
+  // 자리를 먼저 찾고 비어 있을 때만 노드를 만듭니다. 같은 키가 이미 있으면
+  // 아무것도 할당하지 않으므로 거부된 insert 가 메모리를 남기지 않습니다.
   pair<iterator, bool> insert(const_reference data) {
     node_pointer Parent;
-    node_pointer new_node = create_node(data);
     node_pointer &dest = find_pos(Parent, data);
-    node_pointer ret = dest;
-    bool inserted = false;
-    if (dest == u_nullptr) {
-      dest = new_node;
-      ret = dest;
-      dest->parent = Parent;
-      if (_begin->left != u_nullptr)
-        _begin = _begin->left;
-      rebuild_insert(new_node);
-      inserted = true;
-      ++_size;
-    }
-    //    node_pointer ret = reinterpret_cast<node_pointer>(dest);
-    return pair<iterator, bool>(iterator(ret), inserted);
+    if (dest != u_nullptr)
+      return pair<iterator, bool>(iterator(dest), false);
+    node_pointer new_node = create_node(data);
+    dest = new_node;
+    new_node->parent = Parent;
+    if (_begin->left != u_nullptr)
+      _begin = _begin->left;
+    rebuild_insert(new_node);
+    ++_size;
+    return pair<iterator, bool>(iterator(new_node), true);
   }
 
   iterator insert(iterator hint, const_reference data) {
     node_pointer Parent;
-    node_pointer new_node = create_node(data);
     node_pointer dummy;
     node_pointer &dest = find_pos(hint, Parent, dummy, data);
-    node_pointer ret = dest;
-
-    if (dest == u_nullptr) {
-      dest = new_node;
-      ret = dest;
-      dest->parent = Parent;
-      if (_begin->left != u_nullptr)
-        _begin = _begin->left;
-      rebuild_insert(new_node);
-      ++_size;
-    }
-    return iterator(ret);
+    if (dest != u_nullptr)
+      return iterator(dest);
+    node_pointer new_node = create_node(data);
+    dest = new_node;
+    new_node->parent = Parent;
+    if (_begin->left != u_nullptr)
+      _begin = _begin->left;
+    rebuild_insert(new_node);
+    ++_size;
+    return iterator(new_node);
   }
 
   template <class InputIterator>
