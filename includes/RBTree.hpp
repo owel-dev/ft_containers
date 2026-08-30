@@ -176,12 +176,16 @@ private:
     }
   }
 
+  // 노드를 트리에서 떼어낸 뒤 값과 노드 메모리를 해제합니다. 다른 노드는 자리만 바뀌고
+  // 파괴되지 않으므로, 지운 원소 외의 반복자와 참조는 그대로 유효합니다.
   iterator remove_node_pointer(node_pointer node) {
     iterator it(node);
     ++it;
     if (node == _begin)
       _begin = it.base();
     remove_node(root(), node);
+    _alloc.destroy(node);
+    _alloc.deallocate(node, 1);
     --_size;
     return it;
   }
