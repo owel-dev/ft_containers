@@ -322,25 +322,24 @@ public:
     return new_position;
   }
 
+  // 지운 자리 뒤의 원소를 앞으로 당깁니다. 옮기는 길이는 꼬리 길이이고,
+  // 출발지와 목적지가 겹치므로 memcpy 가 아니라 memmove 를 써야 합니다.
   iterator erase(iterator position) {
     _alloc.destroy(position);
-    size_type n = _end - _begin - 1;
-    std::memcpy(position, position + 1, n * sizeof(value_type));
+    size_type tail = _end - (position + 1);
+    std::memmove(position, position + 1, tail * sizeof(value_type));
     --_end;
-    return (position);
+    return position;
   }
 
   iterator erase(iterator first, iterator last) {
-    for (iterator pos = first; pos != last; ++pos) {
+    for (iterator pos = first; pos != last; ++pos)
       _alloc.destroy(pos);
-    }
     size_type move_n = _end - last;
     size_type erase_n = last - first;
-    std::memcpy(first, last, move_n * sizeof(value_type));
-    std::memset(_end - erase_n, 0, erase_n);
+    std::memmove(first, last, move_n * sizeof(value_type));
     _end -= erase_n;
-
-    return (first);
+    return first;
   }
 
   void swap(vector &x) {
