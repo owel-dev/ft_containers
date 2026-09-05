@@ -1,6 +1,9 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <cstring>
+#include <limits>
+
 #include "etc.hpp"
 #include "reverse_iterator.hpp"
 
@@ -140,7 +143,7 @@ public:
     return (*this);
   }
 
-  allocator_type get_allocator() const { return this->_alloc(); }
+  allocator_type get_allocator() const { return this->_alloc; }
 
   /*
    * 반복자

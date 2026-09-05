@@ -1,6 +1,8 @@
 #ifndef RBTREE_HPP
 #define RBTREE_HPP
 
+#include <limits>
+
 #include "RBTree_iterator.hpp"
 #include "etc.hpp"
 
