@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <iomanip>
-#include <iostream>
 #include <memory>
 #include <utility>
 
@@ -123,12 +122,6 @@ public:
 
 template <class T1, class T2> pair<T1, T2> make_pair(T1 x, T2 y) {
   return (pair<T1, T2>(x, y));
-}
-
-template <class T1, class T2>
-std::ostream &operator<<(std::ostream &os, const ft::pair<T1, T2> &x) {
-  os << x.first;
-  return os;
 }
 
 template <class T1, class T2>
