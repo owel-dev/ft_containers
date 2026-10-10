@@ -2,6 +2,8 @@
 
 C++98 표준만으로 STL의 `vector`, `stack`, `map`, `set`을 다시 구현하고, 121개의 테스트로 `std` 컨테이너와 같은 동작을 하는지 검증한 프로젝트입니다.
 
+과제의 요구 사항과 제약 조건은 [과제 설명서 한글 번역](docs/subject.md)에서 볼 수 있습니다.
+
 `make test` 한 번으로 세 개의 테스트 바이너리를 빌드하고 실행합니다. 테스트마다 자식 프로세스에서 격리 실행되므로, 검사 실패뿐 아니라 크래시와 타임아웃도 FAIL 한 줄로 보고됩니다.
 
 ## 아키텍처 다이어그램
@@ -39,6 +41,8 @@ ft_containers/
 ├── src/
 │   └── main.cpp               std와 ft를 바꿔 끼워 실행 시간을 재는 벤치마크
 ├── docs/
+│   ├── subject.md             과제 설명서 한글 번역
+│   ├── subject-rb-tree.png    과제 설명서의 레드블랙 트리 그림
 │   ├── architecture-light.png 아키텍처 다이어그램 (밝은 테마)
 │   └── architecture-dark.png  아키텍처 다이어그램 (어두운 테마)
 └── Makefile                   test, bench, all, clean, fclean, re
